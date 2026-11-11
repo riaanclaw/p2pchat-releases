@@ -51,7 +51,7 @@ invites. The difference is **where it lives**. With p2pchat:
 
 <p align="center">
   <img src="docs/screenshots/welcome.png" alt="The welcome screen: paste an invite key or host a server" width="420">
-  <img src="docs/screenshots/hosting.png" alt="How will your friends connect: same network, Radmin, port forwarding" width="420">
+  <img src="docs/screenshots/hosting.png" alt="How will your friends connect: same network, your own VPN, port forwarding" width="420">
 </p>
 
 ### How will your friends connect?
@@ -59,7 +59,7 @@ invites. The difference is **where it lives**. With p2pchat:
 | Where your friends are | What you need | Status |
 |---|---|---|
 | Same house or same network | Nothing | ✅ Works now |
-| Everyone on [Radmin VPN](https://www.radmin-vpn.com/) | Everyone in the same Radmin network | ✅ Works now |
+| On your own VPN, like [Radmin VPN](https://www.radmin-vpn.com/), [ZeroTier](https://www.zerotier.com/) or [Tailscale](https://tailscale.com/) | Everyone on the same VPN network | ✅ Works now |
 | Anywhere, with port forwarding | Three ports opened on the host's router | ✅ Works now |
 | Anywhere, **no port forwarding** | Nothing: friends click an invite | 🛠 Coming in an update |
 

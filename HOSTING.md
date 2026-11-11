@@ -13,7 +13,7 @@ When you host, the app asks the same question and gives you the right key:
 | Where your friends are | What you need | Status |
 |---|---|---|
 | [Same house or same network](#1-same-house-or-same-network) | Nothing | Works now |
-| [Everyone on Radmin (or another VPN)](#2-everyone-on-radmin-or-another-vpn) | Everyone in the same Radmin network | Works now |
+| [On your own VPN](#2-on-your-own-vpn) (like Radmin VPN, ZeroTier or Tailscale) | Everyone on the same VPN network | Works now |
 | [Anywhere, with port forwarding](#3-anywhere-with-port-forwarding) | Three ports forwarded on the host's router | Works now |
 | [Anywhere, no port forwarding](#4-anywhere-no-port-forwarding-coming-soon) | Nothing | Coming in an update |
 
@@ -29,8 +29,11 @@ When you host, the app asks the same question and gives you the right key:
 2. The app shows a **connect key** for your network address. Send it to your friends.
 3. **Friends:** open p2pchat, choose **Join**, and paste the connect key.
 
-## 2. Everyone on Radmin (or another VPN)
-Same as section 1. The host gets a connect key for each network the PC is on, so send the one marked **Radmin VPN**.
+## 2. On your own VPN
+If your group already shares a VPN, like **Radmin VPN**, **ZeroTier** or **Tailscale**:
+1. Everyone installs it and joins the same network.
+2. The host picks **Your own VPN** under *How will your friends connect?* and copies the key it shows.
+3. Friends paste the key, as in section 1.
 
 ## 3. Anywhere, with port forwarding
 1. On the host's router, forward these to the host PC:
