@@ -3,6 +3,13 @@
 One person **hosts**: their PC runs the community, and everyone else **joins** it with a connect key. Pick the
 section that matches where your friends are.
 
+> Hosting runs a server on your PC that other people connect to. p2pchat is provided as is and you use it at your
+> own risk: see [Use at your own risk](README.md#use-at-your-own-risk).
+
+When you host, the app asks the same question and gives you the right key:
+
+<p align="center"><img src="docs/screenshots/hosting.png" alt="How will your friends connect?" width="720"></p>
+
 | Where your friends are | What you need | Status |
 |---|---|---|
 | [Same house or same network](#1-same-house-or-same-network) | Nothing | Works now |
@@ -37,7 +44,9 @@ If your internet provider uses carrier-grade NAT (common on fibre), port forward
 now, or wait for section 4.
 
 ## 4. Anywhere, no port forwarding (coming soon)
-This is how Radmin and Tailscale feel: the host invites a friend with a link, and it just works.
+This is how Radmin and Tailscale feel: the host invites a friend with a link, and it just works. It is built on
+[Nebula](https://github.com/slackhq/nebula), the open-source overlay network p2pchat already uses for the
+community LAN.
 
 - The host's PC and every friend dial **out** to a small public **meeting point**, so no router needs opening.
 - The meeting point introduces them, and they connect **directly** to each other.
