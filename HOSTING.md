@@ -46,6 +46,20 @@ This is how Radmin and Tailscale feel: the host invites a friend with a link, an
 
 It arrives in an app update. The app will offer to install it when you start it.
 
+### Running your own meeting point (optional)
+The app will come with a meeting point you can use. To run your own on a Linux VPS (x86_64, Debian or Ubuntu):
+
+```bash
+curl -fsSL https://github.com/riaanclaw/p2pchat-releases/raw/main/install-meet.sh | sudo bash
+```
+
+It prints a **meeting point address** to paste into the app. It opens TCP 7380 and UDP 4243–4342 in ufw or
+firewalld when one is running. Other options, after `| sudo bash -s --`:
+
+- `--relay-only`: a dedicated relay box that only carries traffic for communities.
+- `--uninstall`: removes it again (community keys stay in `/var/lib/p2pchat-meet` until you delete them).
+- Run the same command again to upgrade. Every community is kept.
+
 ## Questions
 - **Is my chat private?** Direct messages are end-to-end encrypted. The community's LAN traffic is encrypted
   between machines.
