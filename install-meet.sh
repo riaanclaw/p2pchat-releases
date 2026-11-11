@@ -13,11 +13,11 @@
 # Running it again upgrades in place and keeps every community and key.
 set -euo pipefail
 
-MEET_VERSION="0.1.1"
+MEET_VERSION="0.1.2"
 NEBULA_VERSION="1.12.0"
 RELEASES="https://github.com/riaanclaw/p2pchat-releases/releases/download"
 # Pinned: a download that does not match is refused.
-MEET_SHA_amd64="fc4bdf9f8e32351d6854b1e049d45541977244d9ca375c02e05573af1d491ff9"
+MEET_SHA_amd64="0946c5e624f566288f6f3e512db99e5969d720e5a7a1d7bb9808795670c10c11"
 NEBULA_SHA_amd64="44bf6ae565cf7e5391ca49e8c5f9e3b825755c385eacf79a1f0d28a0b7d3fe51"
 
 PREFIX=/opt/p2pchat-meet
