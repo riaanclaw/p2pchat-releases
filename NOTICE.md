@@ -14,5 +14,5 @@ authors.
 | [electron-updater](https://www.electron.build/auto-update) | 6 | MIT | In-app updates |
 | [web-noise-suppressor](https://github.com/sapphi-red/web-noise-suppressor) | 0.3 | MIT | Noise suppression in voice |
 
-Nebula is a trademark of its owners. p2pchat is not affiliated with or endorsed by Slack, Defined Networking or
-WireGuard LLC.
+Nebula, Discord and Radmin are trademarks of their owners. p2pchat is not affiliated with or endorsed by Slack,
+Defined Networking, WireGuard LLC, Discord Inc. or Famatech. Discord is named only to describe what p2pchat is like.

@@ -1,7 +1,8 @@
 <h1 align="center">p2pchat</h1>
 
 <p align="center">
-  <b>Chat, voice, file sharing and a private LAN for your gaming group, hosted on your own PC.</b><br>
+  <b>Think of it like Discord, except you own your data.</b><br>
+  Chat, voice, file sharing and a private LAN for your gaming group, hosted on your own PC.<br>
   No company in the middle, no subscription, nothing to rent.
 </p>
 
@@ -16,6 +17,16 @@
 <p align="center"><img src="docs/screenshots/chat.png" alt="A community with text and voice channels, a conversation, and the member list" width="860"></p>
 
 > **Test builds.** p2pchat is early. Things will change, and some will break. Updates arrive inside the app.
+
+## Like Discord, but yours
+
+If you've used Discord, you already know your way around: communities, text channels, voice rooms, roles and
+invites. The difference is **where it lives**. With p2pchat:
+
+- **Your community runs on your PC**, or a friend's. Messages, files and member lists stay on hardware you control.
+- **No account with a company.** Accounts belong to your community's server, not to a platform.
+- **Nobody can shut your community down, change the rules or sell your data.** It's yours.
+- **Leaving is easy.** Your data is files in a folder on your PC. Copy them, back them up, or delete them.
 
 ## What it does
 
