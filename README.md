@@ -61,7 +61,7 @@ invites. The difference is **where it lives**. With p2pchat:
 | Same house or same network | Nothing | ✅ Works now |
 | On your own VPN, like [Radmin VPN](https://www.radmin-vpn.com/), [ZeroTier](https://www.zerotier.com/) or [Tailscale](https://tailscale.com/) | Everyone on the same VPN network | ✅ Works now |
 | Anywhere, with port forwarding | Three ports opened on the host's router | ✅ Works now |
-| Anywhere, **no port forwarding** | Nothing: friends click an invite | 🛠 Coming in an update |
+| Anywhere, **no port forwarding** | Your own small VPS as the meeting point ([one command](HOSTING.md#set-up-your-meeting-point-one-command)) | 🛠 App side in the next update |
 
 Step-by-step instructions for each are in the **[hosting guide](HOSTING.md)**.
 
@@ -79,7 +79,7 @@ Step-by-step instructions for each are in the **[hosting guide](HOSTING.md)**.
   only opens a port when you do it yourself.
 - **The no-port-forwarding update** adds a small public *meeting point* that introduces members to each other.
   Traffic goes directly between members when it can. When two routers are too strict for that, the meeting point
-  relays it, still encrypted, so it can never read it. You can [run your own](HOSTING.md#running-your-own-meeting-point-optional).
+  relays it, still encrypted, so it can never read it. Each host runs their own, with [one command](HOSTING.md#set-up-your-meeting-point-one-command).
 
 ## Use at your own risk
 
