@@ -8,17 +8,24 @@
 #   --api-port N          TCP port the app talks to (default 7380)
 #   --ports A-B           UDP ports, one per community (default 4243-4342)
 #   --max N               most communities this box will serve (default 50)
+#   --open                let anyone register a community (a public relay). Without it the box is private:
+#                         only hosts given its registration key (printed at the end) can use it.
+#                         Once open, a box stays open on re-runs; to make it private again, delete the
+#                         MEET_OPEN line from /etc/p2pchat-meet.env and run this again.
 #   --uninstall           remove the service, the programs and the firewall rules this script added
 #
 # Running it again upgrades in place and keeps every community and key.
 set -euo pipefail
 
-MEET_VERSION="0.1.2"
+MEET_VERSION="0.1.3"
 NEBULA_VERSION="1.12.0"
 RELEASES="https://github.com/riaanclaw/p2pchat-releases/releases/download"
 # Pinned: a download that does not match is refused.
-MEET_SHA_amd64="0946c5e624f566288f6f3e512db99e5969d720e5a7a1d7bb9808795670c10c11"
+MEET_SHA_amd64="0e419b4f591999015a8ed78dd774cdc989db04f71d98578ed4bc9746571a69ec"
+MEET_SHA_arm64="ed0cd70a4be82c2faf6d6d6b477d5d6f96196f0b58f1bb98dfa1bfa8c20eaca8"
+# From https://github.com/slackhq/nebula/releases/download/v1.12.0/SHASUM256.txt
 NEBULA_SHA_amd64="44bf6ae565cf7e5391ca49e8c5f9e3b825755c385eacf79a1f0d28a0b7d3fe51"
+NEBULA_SHA_arm64="1279bdde8ccaa0e8c0f90276a295cb471a1d10b5a5308d68d3ed519803df503a"
 
 PREFIX=/opt/p2pchat-meet
 DATA=/var/lib/p2pchat-meet
@@ -26,13 +33,14 @@ ENVFILE=/etc/p2pchat-meet.env
 UNIT=/etc/systemd/system/p2pchat-meet.service
 USER_NAME=p2pchat-meet
 
-role=meet api_port=7380 ports=4243-4342 max=50 uninstall=0
+role=meet api_port=7380 ports=4243-4342 max=50 uninstall=0 open=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --relay-only) role=relay ;;
     --api-port) api_port="${2:?--api-port needs a number}"; shift ;;
     --ports) ports="${2:?--ports needs a range like 4243-4342}"; shift ;;
     --max) max="${2:?--max needs a number}"; shift ;;
+    --open) open=1 ;;
     --uninstall) uninstall=1 ;;
     -h|--help) sed -n '2,14p' "$0" 2>/dev/null || true; exit 0 ;;
     *) echo "Unknown option: $1" >&2; exit 2 ;;
@@ -84,7 +92,8 @@ fi
 
 case "$(uname -m)" in
   x86_64|amd64) arch=amd64 ;;
-  *) die "this installer has a build for x86_64 only so far (this machine is $(uname -m))." ;;
+  aarch64|arm64) arch=arm64 ;;
+  *) die "this installer has builds for x86_64 and arm64 only (this machine is $(uname -m))." ;;
 esac
 has curl || die "curl is needed."
 has tar || die "tar is needed."
@@ -96,12 +105,13 @@ check() { echo "$2  $1" | sha256sum -c --quiet - || die "$(basename "$1") does n
 
 say "Downloading Nebula $NEBULA_VERSION and the meeting point $MEET_VERSION"
 fetch "https://github.com/slackhq/nebula/releases/download/v$NEBULA_VERSION/nebula-linux-$arch.tar.gz" "$tmp/nebula.tgz"
-check "$tmp/nebula.tgz" "$NEBULA_SHA_amd64"
+nebula_sha="NEBULA_SHA_$arch" meet_sha="MEET_SHA_$arch"
+check "$tmp/nebula.tgz" "${!nebula_sha}"
 if [ -n "${MEET_BINARY:-}" ]; then
   cp "$MEET_BINARY" "$tmp/p2pchat-meet"   # a local build, for testing this script before a release
 else
   fetch "$RELEASES/meet-v$MEET_VERSION/p2pchat-meet-linux-$arch" "$tmp/p2pchat-meet"
-  check "$tmp/p2pchat-meet" "$MEET_SHA_amd64"
+  check "$tmp/p2pchat-meet" "${!meet_sha}"
 fi
 tar xzf "$tmp/nebula.tgz" -C "$tmp" nebula nebula-cert
 
@@ -128,6 +138,14 @@ MEET_MAX=$max
 MEET_ROLE=$role
 EOF
 fi
+# Private unless --open: a registration key, made once and kept across upgrades and option changes.
+if [ "$open" = 1 ]; then
+  sed -i '/^MEET_REGISTER_KEY=/d' "$ENVFILE"; grep -q '^MEET_OPEN=1' "$ENVFILE" || echo 'MEET_OPEN=1' >> "$ENVFILE"
+elif ! grep -q '^MEET_OPEN=1' "$ENVFILE"; then
+  key="${MEET_REGISTER_KEY:-$(head -c 24 /dev/urandom | base64 | tr '+/' '-_' | tr -d '=\n')}"
+  grep -q '^MEET_REGISTER_KEY=' "$ENVFILE" || echo "MEET_REGISTER_KEY=$key" >> "$ENVFILE"
+fi
+chmod 600 "$ENVFILE"
 # shellcheck disable=SC1090
 . "$ENVFILE"
 api_port="${MEET_LISTEN##*:}" ports="$MEET_PORTS" role="$MEET_ROLE"
@@ -167,6 +185,8 @@ elif fwd_on; then
 else
   echo "    No ufw or firewalld found. If this VPS has another firewall, open TCP $api_port and UDP $ports."
 fi
+echo "    If your VPS provider has its own firewall (AWS security groups, Oracle Cloud, Hetzner or DigitalOcean"
+echo "    cloud firewalls), open TCP $api_port and UDP $ports there too, or friends will not get through."
 
 if has systemctl && [ -d /run/systemd/system ]; then
   systemctl daemon-reload
@@ -189,3 +209,11 @@ fi
 echo
 echo "    http://$ip:$api_port"
 echo
+if [ -n "${MEET_REGISTER_KEY:-}" ]; then
+  say "and this as its registration key (keep it to yourself; only hosts with it can use this box):"
+  echo
+  echo "    $MEET_REGISTER_KEY"
+  echo
+else
+  say "This box is open: anyone who finds it can register a community."
+fi
